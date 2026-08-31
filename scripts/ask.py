@@ -1,60 +1,54 @@
-# argparse is a standard Python library for parsing command-line arguments. 
-# In this script, we use argparse to allow the user to input a question when they run the script
+"""
+Interactive Command-Line Query Interface for Enterprise Hybrid RAG System.
+
+Usage:
+    python scripts/ask.py "What are the company guidelines on data retention?"
+"""
+
 import argparse
+import sys
 from src.config import setup_llamaindex
 from src.query_engine import build_query_engine
 
 
-def main():
-    # We create an ArgumentParser object and define a required positional argument called "question".
-    parser = argparse.ArgumentParser()
-    # The "question" argument will be the user's query that they want to ask the system. 
-    # When the user runs the script, they will provide their question as a command-line argument, and we will use that question to query our LlamaIndex knowledge base.
-    parser.add_argument("question")
-    # We call parser.parse_args() to parse the command-line arguments and store them in the args variable.
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Query the Enterprise Hybrid RAG System with natural language questions."
+    )
+    parser.add_argument(
+        "question",
+        type=str,
+        help="Natural language question to query against the enterprise knowledge base."
+    )
     args = parser.parse_args()
 
-    setup_llamaindex()
-    query_engine = build_query_engine()
+    try:
+        print("⚡ Initializing Knowledge Base & Generative Pipeline...")
+        setup_llamaindex()
+        query_engine = build_query_engine()
 
-    # This sends the user’s question into the RAG query engine.
-    response = query_engine.query(args.question)
-    '''
-    When this line runs, LlamaIndex internally does:
+        print(f"\n🔍 Query: {args.question}")
+        print("─" * 70)
 
-    1. embed the question for vector search
-    2. search ChromaDB for semantically similar nodes
-    3. search BM25 for keyword-matching nodes
-    4. fuse/combine the retrieval results
-    5. rerank the candidate nodes
-    6. send the question + selected chunks to Gemini
-    7. return Gemini's final answer with source nodes
-    
-    '''
+        response = query_engine.query(args.question)
 
-    print("\nANSWER")
-    print(response)
+        print("\n💡 SYNTHESIZED ANSWER:")
+        print(response)
 
-    print("\nSOURCES")
-    for source_node in response.source_nodes:
-        # Each source_node contains the original text chunk (source_node.node.text), its metadata (source_node.node.metadata), and the relevance score assigned by the retriever (source_node.score).
-        metadata = source_node.node.metadata
-        # score is a relevance score that indicates how relevant this source node is to the user's question. Higher scores mean more relevant.
-        score = source_node.score
-        print("-" * 60)
-        print("Score:", score)
-        print("Source:", metadata)
-        print(source_node.node.text[:500])
+        print("\n📑 GROUNDING CITATIONS & SOURCE PASSAGES:")
+        for idx, source_node in enumerate(response.source_nodes, 1):
+            score = getattr(source_node, "score", "N/A")
+            metadata = source_node.node.metadata
+            file_name = metadata.get("file_name", "Unknown File")
+            page_label = metadata.get("page_label", "N/A")
 
-'''
-Last block prints the evidence used by the RAG system:
+            print(f"\n[{idx}] Source: {file_name} (Page: {page_label}) | Relevance Score: {score}")
+            print("─" * 70)
+            print(source_node.node.text[:400].strip() + "...")
 
-which chunks were used
-where they came from
-how relevant they were
-what text they contained
-
-'''
+    except Exception as e:
+        print(f"\n❌ Error executing query: {e}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":

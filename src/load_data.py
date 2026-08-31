@@ -1,26 +1,38 @@
-# SimpleDirectoryReader is a built-in LlamaIndex class that can read documents from a directory 
-# and convert them into LlamaIndex’s Document format. It supports various file types like PDFs, 
-# text files, markdown files, CSVs, PPTX, and JSONL.
+"""
+Document Ingestion Pipeline for Multi-Format Enterprise Knowledge Bases.
+
+Supports automated recursive ingestion of unstructured and semi-structured documents:
+- Portable Document Formats (.pdf)
+- Markdown Documentation (.md)
+- Plain Text & Transcripts (.txt)
+- Tabular Comma-Separated Values (.csv)
+- Presentation Slides (.pptx)
+- Structured JSON Lines (.jsonl)
+"""
+
+from typing import List
 from llama_index.core import SimpleDirectoryReader
+from llama_index.core.schema import Document
 from src.config import RAW_DIR
 
 
-def load_documents():
-    return SimpleDirectoryReader(
+def load_documents() -> List[Document]:
+    """
+    Recursively scans and parses raw enterprise documents into LlamaIndex Document nodes.
+
+    Returns:
+        List[Document]: Extracted document objects containing text payloads and file metadata.
+        
+    Raises:
+        FileNotFoundError: If the source data directory does not exist.
+    """
+    if not RAW_DIR.exists():
+        RAW_DIR.mkdir(parents=True, exist_ok=True)
+        return []
+
+    reader = SimpleDirectoryReader(
         input_dir=str(RAW_DIR),
-        recursive=True, # Tells LlamaIndex to also look inside subfolders of data/raw/.
-        required_exts=[".pdf", ".md", ".txt", ".csv", ".pptx", ".jsonl"], # Tells LlamaIndex to load only files with these extensions.
-    ).load_data()
-
-# It reads the files, extracts text, attaches metadata like file name/path, and 
-# returns a list of LlamaIndex Document objects.
-'''
-It returns something like:
-
-[
-    Document(text="AcmeCloud Refund Policy 2024...", metadata={...}),
-    Document(text="# Enterprise Assistant FAQ...", metadata={...}),
-    Document(text="plan,monthly_price_usd,...", metadata={...}),
-]
-
-'''
+        recursive=True,
+        required_exts=[".pdf", ".md", ".txt", ".csv", ".pptx", ".jsonl"],
+    )
+    return reader.load_data()

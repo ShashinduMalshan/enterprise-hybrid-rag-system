@@ -1,0 +1,8 @@
+{"ticket_id": "TCK-1001", "subject": "Refund requested for Professional plan", "body": "Customer requested refund on day 18. Policy appears to allow 30 days for Professional."}
+{"ticket_id": "TCK-1002", "subject": "Checkout error E-447", "body": "User saw E-447 during checkout. Payment authorization failed."}
+{"ticket_id": "TCK-1003", "subject": "Starter refund outside window", "body": "Starter customer requested refund after 20 days. Needs case-by-case approval."}
+{"ticket_id": "TCK-1004", "subject": "Enterprise refund exception", "body": "Enterprise customer requests exception. Account manager and finance approval required."}
+{"ticket_id": "TCK-1005", "subject": "SSO configuration issue", "body": "Enterprise admin needs SSO setup guidance."}
+{"ticket_id": "TCK-1006", "subject": "Delayed invoice generation", "body": "Professional customer reports invoice generated 48 hours late."}
+{"ticket_id": "TCK-1007", "subject": "Refund policy clarification", "body": "Agent asked whether consumed usage charges are refundable. Policy says no."}
+{"ticket_id": "TCK-1008", "subject": "Checkout API timeout", "body": "checkout-api timed out while waiting for payments-service."}

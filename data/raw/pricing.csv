@@ -1,0 +1,4 @@
+plan,monthly_price_usd,max_seats,support
+Starter,19,10,standard
+Professional,49,100,priority
+Enterprise,custom,unlimited,priority + account manager

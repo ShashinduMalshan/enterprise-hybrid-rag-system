@@ -2,8 +2,11 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
+# Imports LlamaIndex’s global configuration object, where we set the default LLM and embedding model.
 from llama_index.core import Settings
+# Imports the Gemini LLM wrapper so LlamaIndex can use Gemini to generate answers.
 from llama_index.llms.google_genai import GoogleGenAI
+# Imports the Gemini embedding wrapper so LlamaIndex can convert text chunks into vector embeddings.
 from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
@@ -20,7 +23,7 @@ def setup_llamaindex() -> None:
     if not api_key:
         raise RuntimeError("Missing GEMINI_API_KEY in .env")
     
-    print("Using Gemini LLM model:", os.getenv("GEMINI_LLM_MODEL", "gemini-2.5-flash"))
+    print("Using Gemini LLM model:", os.getenv("GEMINI_LLM_MODEL"))
 
     Settings.llm = GoogleGenAI(
         model=os.getenv("GEMINI_LLM_MODEL", "gemini-2.5-flash"),

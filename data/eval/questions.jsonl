@@ -1,0 +1,3 @@
+{"id":"q01","question":"What is the refund window for Professional plan customers?","expected_sources":["refund_policy_2024.pdf"],"expected_answer_contains":["30 days"]}
+{"id":"q02","question":"What does error code E-447 mean?","expected_sources":["runbook_checkout.md"],"expected_answer_contains":["payment authorization"]}
+{"id":"q03","question":"Which plan includes priority support?","expected_sources":["pricing.csv"],"expected_answer_contains":["Professional","Enterprise"]}

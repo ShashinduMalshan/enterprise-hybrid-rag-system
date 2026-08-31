@@ -91,10 +91,8 @@ pip install -r requirements.txt
 ### 4. Configure Environment Variables
 Create a `.env` file in the root directory:
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_LLM_MODEL=gemini-2.5-flash
-GEMINI_EMBEDDING_MODEL=gemini-embedding-001
-CHROMA_PERSIST_DIR=./storage/chroma
+GOOGLE_API_KEY=your_gemini_api_key_here
+CHROMA_PERSIST_DIR=./storage/chroma_db
 ```
 
 ### 5. Ingest Documents & Run Queries
